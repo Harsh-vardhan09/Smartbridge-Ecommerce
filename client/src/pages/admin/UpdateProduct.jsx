@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import '../../styles/NewProducts.css'
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 
@@ -95,136 +94,234 @@ const UpdateProduct = () => {
 
 
   return (
-    <div className="new-product-page">
-        <div className="new-product-container">
-          <h3>Update Product</h3>
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-xl shadow-md p-8">
+          <h3 className="text-3xl font-bold text-primary mb-8">Update Product</h3>
 
-          <div className="new-product-body">
+          <div className="space-y-6">
 
-            <span>
-              <div className="form-floating mb-3 span-21">
-                <input type="text" className="form-control" id="floatingNewProduct1" value={productName} onChange={(e)=>setProductName(e.target.value)} />
-                <label htmlFor="floatingNewProduct1">Product name</label>
+            {/* Product Name & Description */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
+                <input 
+                  type="text" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" 
+                  value={productName} 
+                  onChange={(e)=>setProductName(e.target.value)}
+                  placeholder="Enter product name"
+                />
               </div>
-              <div className="form-floating mb-3 span-22">
-                <input type="text" className="form-control" id="floatingNewProduct2" value={productDescription} onChange={(e)=>setProductDescription(e.target.value)} />
-                <label htmlFor="floatingNewProduct2">Product Description</label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Product Description</label>
+                <input 
+                  type="text" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" 
+                  value={productDescription} 
+                  onChange={(e)=>setProductDescription(e.target.value)}
+                  placeholder="Enter description"
+                />
               </div>
-            </span>
-
-            <div className="form-floating mb-3">
-              <input type="text" className="form-control" id="floatingNewProduct1" value={productMainImg} onChange={(e)=>setProductMainImg(e.target.value)}/>
-              <label htmlFor="floatingNewProduct1">Thumbnail Img url</label>
             </div>
 
-            <span>
-              <div className="form-floating mb-3 span-3">
-                <input type="text" className="form-control" id="floatingNewProduct2" value={productCarouselImg1} onChange={(e)=>setProductCarouselImg1(e.target.value)}/>
-                <label htmlFor="floatingNewProduct2">Add on img1 url</label>
+            {/* Thumbnail Image */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Thumbnail Image URL</label>
+              <input 
+                type="text" 
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" 
+                value={productMainImg} 
+                onChange={(e)=>setProductMainImg(e.target.value)}
+                placeholder="Enter image URL"
+              />
+            </div>
+
+            {/* Additional Images */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Add-on Image 1 URL</label>
+                <input 
+                  type="text" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" 
+                  value={productCarouselImg1} 
+                  onChange={(e)=>setProductCarouselImg1(e.target.value)}
+                  placeholder="Image URL"
+                />
               </div>
-              <div className="form-floating mb-3 span-3">
-                <input type="text" className="form-control" id="floatingNewProduct2" value={productCarouselImg2} onChange={(e)=>setProductCarouselImg2(e.target.value)}/>
-                <label htmlFor="floatingNewProduct2">Add on img2 url</label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Add-on Image 2 URL</label>
+                <input 
+                  type="text" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" 
+                  value={productCarouselImg2} 
+                  onChange={(e)=>setProductCarouselImg2(e.target.value)}
+                  placeholder="Image URL"
+                />
               </div>
-              <div className="form-floating mb-3 span-3">
-                <input type="text" className="form-control" id="floatingNewProduct2" value={productCarouselImg3} onChange={(e)=>setProductCarouselImg3(e.target.value)} />
-                <label htmlFor="floatingNewProduct2">Add on img3 url</label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Add-on Image 3 URL</label>
+                <input 
+                  type="text" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" 
+                  value={productCarouselImg3} 
+                  onChange={(e)=>setProductCarouselImg3(e.target.value)}
+                  placeholder="Image URL"
+                />
               </div>
-            </span>
+            </div>
 
-            <section>
-              <h4>Available Size</h4>
+            {/* Available Sizes */}
+            <div>
+              <h4 className="text-lg font-semibold text-primary mb-3">Available Sizes</h4>
+              <div className="flex flex-wrap gap-4">
+                <label className="flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    value="S" 
+                    checked={productSizes.includes('S')} 
+                    onChange={handleCheckBox}
+                    className="w-5 h-5 text-accent focus:ring-accent border-gray-300 rounded"
+                  />
+                  <span className="ml-2 text-gray-700 font-medium">S</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    value="M" 
+                    checked={productSizes.includes('M')} 
+                    onChange={handleCheckBox}
+                    className="w-5 h-5 text-accent focus:ring-accent border-gray-300 rounded"
+                  />
+                  <span className="ml-2 text-gray-700 font-medium">M</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    value="L" 
+                    checked={productSizes.includes('L')} 
+                    onChange={handleCheckBox}
+                    className="w-5 h-5 text-accent focus:ring-accent border-gray-300 rounded"
+                  />
+                  <span className="ml-2 text-gray-700 font-medium">L</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    value="XL" 
+                    checked={productSizes.includes('XL')} 
+                    onChange={handleCheckBox}
+                    className="w-5 h-5 text-accent focus:ring-accent border-gray-300 rounded"
+                  />
+                  <span className="ml-2 text-gray-700 font-medium">XL</span>
+                </label>
+              </div>
+            </div>
 
-              <span>
-                <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="S" checked={productSizes.includes('S')} onChange={handleCheckBox} id="flexCheckDefault" />
-                  <label className="form-check-label" htmlFor="flexCheckDefault">
-                    S
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="M" checked={productSizes.includes('M')} onChange={handleCheckBox} id="flexCheckChecked" />
-                  <label className="form-check-label" htmlFor="flexCheckChecked">
-                    M
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="L" checked={productSizes.includes('L')} onChange={handleCheckBox} id="flexCheckDefault" />
-                  <label className="form-check-label" htmlFor="flexCheckDefault">
-                    L
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="XL" checked={productSizes.includes('XL')} onChange={handleCheckBox} id="flexCheckChecked" />
-                  <label className="form-check-label" htmlFor="flexCheckChecked">
-                    XL
-                  </label>
-                </div>
-              </span>
-            </section>
+            {/* Gender */}
+            <div>
+              <h4 className="text-lg font-semibold text-primary mb-3">Gender</h4>
+              <div className="flex flex-wrap gap-4">
+                <label className="flex items-center cursor-pointer">
+                  <input 
+                    type="radio" 
+                    name="productGender" 
+                    value="Men" 
+                    checked={productGender==='Men'}
+                    onChange={(e)=> setProductGender(e.target.value)}
+                    className="w-5 h-5 text-accent focus:ring-accent border-gray-300"
+                  />
+                  <span className="ml-2 text-gray-700 font-medium">Men</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input 
+                    type="radio" 
+                    name="productGender" 
+                    value="Women" 
+                    checked={productGender==='Women'}
+                    onChange={(e)=> setProductGender(e.target.value)}
+                    className="w-5 h-5 text-accent focus:ring-accent border-gray-300"
+                  />
+                  <span className="ml-2 text-gray-700 font-medium">Women</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input 
+                    type="radio" 
+                    name="productGender" 
+                    value="Unisex" 
+                    checked={productGender==='Unisex'}
+                    onChange={(e)=> setProductGender(e.target.value)}
+                    className="w-5 h-5 text-accent focus:ring-accent border-gray-300"
+                  />
+                  <span className="ml-2 text-gray-700 font-medium">Unisex</span>
+                </label>
+              </div>
+            </div>
 
-            <section>
-              <h4>Gender</h4>
-              <span>
-                <div className="form-check">
-                  <input className="form-check-input" type="radio" name="productGender" value="Men" checked={productGender==='Men'} id="flexRadioDefault1" onChange={(e)=> setProductGender(e.target.value)} />
-                  <label className="form-check-label" htmlFor="flexRadioDefault1">
-                    Men
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input className="form-check-input" type="radio" name="productGender" value="Women" checked={productGender==='Women'} id="flexRadioDefault2" onChange={(e)=> setProductGender(e.target.value)}/>
-                  <label className="form-check-label" htmlFor="flexRadioDefault2">
-                    Women
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input className="form-check-input" type="radio" name="productGender" value="Unisex" checked={productGender==='Unisex'} id="flexRadioDefault2" onChange={(e)=> setProductGender(e.target.value)}/>
-                  <label className="form-check-label" htmlFor="flexRadioDefault2">
-                    Unisex
-                  </label>
-                </div>
-              </span>
-            </section>
-
-
-            <span>
-              <div className="form-floating mb-3 span-3">
-                <select className="form-select" id='floatingNewProduct5' aria-label="Default select example" value={productCategory} onChange={(e)=>setProductCategory(e.target.value)}>
-                  <option value="">Choose Product category</option>
+            {/* Category, Price, Discount */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <select 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent bg-white" 
+                  value={productCategory} 
+                  onChange={(e)=>setProductCategory(e.target.value)}
+                >
+                  <option value="">Choose category</option>
                   {AvailableCategories.map((category)=>{
                     return(
-                        <option value={category}>{category}</option>
+                      <option key={category} value={category}>{category}</option>
                     )
                   })}
                   <option value="new category">New category</option>
                 </select>
-                <label htmlFor="floatingNewProduct5">Category</label>
               </div>
-              <div className="form-floating mb-3 span-3">
-                <input type="number" className="form-control" id="floatingNewProduct6" value={productPrice} onChange={(e)=>setProductPrice(e.target.value)}/>
-                <label htmlFor="floatingNewProduct6">Price</label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Price (₹)</label>
+                <input 
+                  type="number" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" 
+                  value={productPrice} 
+                  onChange={(e)=>setProductPrice(e.target.value)}
+                  placeholder="0"
+                />
               </div>
-              <div className="form-floating mb-3 span-3">
-                <input type="number" className="form-control" id="floatingNewProduct7" value={productDiscount} onChange={(e)=>setProductDiscount(e.target.value)}/>
-                <label htmlFor="floatingNewProduct7">Discount (in %)</label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Discount (%)</label>
+                <input 
+                  type="number" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" 
+                  value={productDiscount} 
+                  onChange={(e)=>setProductDiscount(e.target.value)}
+                  placeholder="0"
+                />
               </div>
-            </span>
+            </div>
 
-            {productCategory === 'new category' ?
-               <div className="form-floating mb-3">
-               <input type="text" className="form-control" id="floatingNewProduct8" value={productNewCategory} onChange={(e)=>setProductNewCategory(e.target.value)}/>
-               <label htmlFor="floatingNewProduct8">New Category</label>
-           </div>
-            :
-                  ""
-            }
-           
+            {/* New Category Input */}
+            {productCategory === 'new category' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">New Category Name</label>
+                <input 
+                  type="text" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" 
+                  value={productNewCategory} 
+                  onChange={(e)=>setProductNewCategory(e.target.value)}
+                  placeholder="Enter new category"
+                />
+              </div>
+            )}
 
           </div>
 
-          <button className='btn btn-primary' onClick={handleUpdateProduct}>Update</button>
+          <button 
+            className="w-full mt-8 bg-accent text-white py-3 px-6 rounded-lg hover:bg-accent-hover transition-colors font-semibold text-lg" 
+            onClick={handleUpdateProduct}
+          >
+            Update Product
+          </button>
         </div>
+      </div>
     </div>
   )
 }

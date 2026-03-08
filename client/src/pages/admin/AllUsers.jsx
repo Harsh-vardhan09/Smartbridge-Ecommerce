@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import '../../styles/AllUsers.css'
 import axios from 'axios'
 
 const AllUsers = () => {
@@ -28,37 +27,40 @@ const AllUsers = () => {
 
 
   return (
-    <div className="all-users-page">
-      <h3>All Users</h3>
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        <h3 className="text-3xl font-bold text-primary mb-8">All Users</h3>
 
-      <div className="user-cards">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        {users.map((user)=>{
-          return(
-            <div className="user-card">
-              <span>
-                <h5>User Id </h5>
-                <p>{user._id}</p>
-              </span>
-              <span>
-                <h5>User Name </h5>
-                <p>{user.username}</p>
-              </span>
-              <span>
-                <h5>Email Address </h5>
-                <p>{user.email}</p>
-              </span>
-              <span>
-                <h5>Orders </h5>
-                <p>{orders.filter(order=> order.userId === user._id).length}</p>
-              </span>
-            </div>
-          )
-        })}
-        
+          {users.map((user)=>{
+            return(
+              <div key={user._id} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                <div className="space-y-4">
+                  <div>
+                    <h5 className="text-sm font-medium text-gray-600 mb-1">User ID</h5>
+                    <p className="text-xs text-gray-800 break-all font-mono">{user._id}</p>
+                  </div>
+                  <div>
+                    <h5 className="text-sm font-medium text-gray-600 mb-1">User Name</h5>
+                    <p className="text-base text-primary font-semibold">{user.username}</p>
+                  </div>
+                  <div>
+                    <h5 className="text-sm font-medium text-gray-600 mb-1">Email Address</h5>
+                    <p className="text-sm text-gray-800 break-all">{user.email}</p>
+                  </div>
+                  <div className="pt-2 border-t border-gray-200">
+                    <h5 className="text-sm font-medium text-gray-600 mb-1">Total Orders</h5>
+                    <p className="text-2xl font-bold text-accent">{orders.filter(order=> order.userId === user._id).length}</p>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+          
+        </div>
 
       </div>
-
     </div>
   )
 }

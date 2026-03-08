@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { GeneralContext } from '../context/GeneralContext';
 
 const Register = ({setIsLogin}) => {
@@ -11,32 +11,61 @@ const Register = ({setIsLogin}) => {
     await register()
   }
   return (
-    <form className="authForm">
-        <h2>Register</h2>
-        <div className="form-floating mb-3 authFormInputs">
-            <input type="text" className="form-control" id="floatingInput" placeholder="username"
-                                                       onChange={(e)=> setUsername(e.target.value)} />
-            <label htmlFor="floatingInput">Username</label>
-        </div>
-        <div className="form-floating mb-3 authFormInputs">
-            <input type="email" className="form-control" id="floatingEmail" placeholder="name@example.com"
-                                                       onChange={(e)=> setEmail(e.target.value)} />
-            <label htmlFor="floatingInput">Email address</label>
-        </div>
-        <div className="form-floating mb-3 authFormInputs">
-            <input type="password" className="form-control" id="floatingPassword" placeholder="Password"
-                                                       onChange={(e)=> setPassword(e.target.value)} /> 
-            <label htmlFor="floatingPassword">Password</label>
-        </div>
-        <select className="form-select form-select-lg mb-3" aria-label=".form-select-lg example" 
-                                                      onChange={(e)=> setUsertype(e.target.value)}>
-          <option value="">User type</option>
-          <option value="admin">Admin</option>
-          <option value="customer">Customer</option>
-        </select>
+    <form className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md" onSubmit={handleRegister}>
+        <h2 className="text-3xl font-bold text-primary mb-8 text-center">Create Account</h2>
         
-        <button className="btn btn-primary" onClick={handleRegister}>Sign up</button>
-        <p>Already registered? <span onClick={()=> setIsLogin(true)}>Login</span></p>
+        <div className="mb-5">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
+            <input 
+              type="text" 
+              className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+              placeholder="Enter username"
+              onChange={(e)=> setUsername(e.target.value)} 
+            />
+        </div>
+
+        <div className="mb-5">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+            <input 
+              type="email" 
+              className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+              placeholder="name@example.com"
+              onChange={(e)=> setEmail(e.target.value)} 
+            />
+        </div>
+
+        <div className="mb-5">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+            <input 
+              type="password" 
+              className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+              placeholder="••••••••"
+              onChange={(e)=> setPassword(e.target.value)} 
+            /> 
+        </div>
+
+        <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">User Type</label>
+            <select 
+              className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all cursor-pointer" 
+              onChange={(e)=> setUsertype(e.target.value)}
+            >
+              <option value="">Select user type</option>
+              <option value="admin">Admin</option>
+              <option value="customer">Customer</option>
+            </select>
+        </div>
+        
+        <button 
+          type="submit"
+          className="w-full py-3 bg-accent text-white rounded-lg font-semibold hover:bg-accent-hover transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5" 
+        >
+          Sign Up
+        </button>
+
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Already registered? <span onClick={()=> setIsLogin(true)} className="text-accent font-semibold cursor-pointer hover:underline">Sign in</span>
+        </p>
     </form>
   )}
 export default Register;

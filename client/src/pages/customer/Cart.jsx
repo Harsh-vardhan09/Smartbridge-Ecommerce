@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import '../../styles/Cart.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { GeneralContext } from '../../context/GeneralContext';
@@ -76,6 +75,7 @@ const Cart = () => {
   const [address, setAddress] = useState('');
   const [pincode, setPincode] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
 
   const userId = localStorage.getItem('userId');
 
@@ -99,137 +99,214 @@ const Cart = () => {
       setEmail('');
       setAddress('');
       setPincode('');
-      setPaymentMethod('');
+      setShowCheckoutModal(false);
       navigate('/profile');
     } catch (error) {
       console.error('Error placing order:', error);
     }
   };
 
-  if (loading) return <p style={{ textAlign: 'center', marginTop: '20vh' }}>Loading cart...</p>;
+  if (loading) return <div className="min-h-screen bg-secondary flex items-center justify-center"><p className="text-gray-600 text-lg">Loading cart...</p></div>;
 
   return (
-    <div className="cartPage">
-      <div className="cartContents">
-        {cartItems.length === 0 && <p style={{ textAlign: 'center', marginTop: '20vh' }}>Cart is empty...</p>}
+    <div className="min-h-screen bg-secondary py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-3xl font-bold text-primary mb-8">Shopping Cart</h1>
 
-        {cartItems.map((item) => (
-          <div className="cartItem" key={item._id}>
-            <img src={item.mainImg} alt={item.title} />
-            <div className="cartItem-data">
-              <h4>{item.title}</h4>
-              <p>{item.description}</p>
-              <div className="cartItem-inputs">
-                <span>
-                  <p>
-                    <b>Size: </b> {item.size}
-                  </p>
-                </span>
-                <span>
-                  <p>
-                    <b>Quantity: </b> {item.quantity}
-                  </p>
-                </span>
+        {cartItems.length === 0 ? (
+          <div className="bg-white rounded-2xl p-16 text-center shadow-sm">
+            <p className="text-gray-500 text-lg mb-4">Your cart is empty</p>
+            <button 
+              onClick={() => navigate('/')} 
+              className="px-6 py-2 bg-accent text-white rounded-lg font-medium hover:bg-accent-hover transition-colors"
+            >
+              Continue Shopping
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            {/* Cart Items */}
+            <div className="lg:col-span-2 space-y-4">
+              {cartItems.map((item) => (
+                <div key={item._id} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex gap-6">
+                    <div className="w-32 h-32 flex-shrink-0 rounded-lg overflow-hidden bg-gray-50">
+                      <img 
+                        src={item.mainImg} 
+                        alt={item.title} 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-primary mb-2">{item.title}</h3>
+                      <p className="text-sm text-gray-600 mb-3">{item.description}</p>
+                      <div className="flex gap-4 mb-3">
+                        <span className="text-sm text-gray-700">
+                          <b>Size:</b> {item.size}
+                        </span>
+                        <span className="text-sm text-gray-700">
+                          <b>Qty:</b> {item.quantity}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xl font-bold text-primary">
+                          ₹{parseInt(item.price - (item.price * item.discount) / 100) * item.quantity}
+                        </span>
+                        <button 
+                          className="px-4 py-2 text-accent border border-accent rounded-lg font-medium hover:bg-accent hover:text-white transition-colors" 
+                          onClick={() => removeItem(item._id)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Price Summary */}
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-xl p-6 shadow-sm sticky top-20">
+                <h2 className="text-xl font-bold text-primary mb-6">Price Details</h2>
+                <div className="space-y-3 mb-4">
+                  <div className="flex justify-between text-gray-700">
+                    <span>Total MRP:</span>
+                    <span>₹{totalPrice}</span>
+                  </div>
+                  <div className="flex justify-between text-green-600">
+                    <span>Discount on MRP:</span>
+                    <span>- ₹{totalDiscount}</span>
+                  </div>
+                  <div className="flex justify-between text-accent">
+                    <span>Delivery Charges:</span>
+                    <span>{deliveryCharges === 0 ? 'FREE' : `+ ₹${deliveryCharges}`}</span>
+                  </div>
+                </div>
+                <hr className="border-gray-200 my-4" />
+                <div className="flex justify-between items-center mb-6">
+                  <span className="text-lg font-bold text-primary">Final Price:</span>
+                  <span className="text-2xl font-bold text-primary">₹{totalPrice - totalDiscount + deliveryCharges}</span>
+                </div>
+                <button 
+                  className="w-full py-3 bg-accent text-white rounded-lg font-semibold hover:bg-accent-hover transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                  onClick={() => setShowCheckoutModal(true)}
+                >
+                  Place Order
+                </button>
               </div>
-              <span>
-                <h5>
-                  <b>Price: </b> &#8377; {parseInt(item.price - (item.price * item.discount) / 100) * item.quantity}
-                </h5>
-              </span>
-              <button className="btn" onClick={() => removeItem(item._id)}>
-                Remove
-              </button>
             </div>
           </div>
-        ))}
-      </div>
+        )}
 
-      <div className="cartPriceBody">
-        <h4>Price Details</h4>
-        <span>
-          <b>Total MRP: </b> <p>&#8377; {totalPrice}</p>
-        </span>
-        <span>
-          <b>Discount on MRP: </b> <p style={{ color: 'rgb(7, 156, 106)' }}> - &#8377; {totalDiscount}</p>
-        </span>
-        <span>
-          <b>Delivery Charges: </b> <p style={{ color: 'red' }}> + &#8377; {deliveryCharges}</p>
-        </span>
-        <hr />
-        <h5>
-          <b>Final Price: </b> &#8377; {totalPrice - totalDiscount + deliveryCharges}
-        </h5>
-        <button data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-          Place order
-        </button>
-      </div>
-
-      {/* Checkout Modal */}
-      <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="staticBackdropLabel">
-                Checkout
-              </h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body">
-              {/* Checkout Form */}
-              <div className="checkout-address">
-                <h4>Checkout details</h4>
-                <div className="form-floating mb-3">
-                  <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
-                  <label>Name</label>
-                </div>
-
-                <section>
-                  <div className="form-floating mb-3 span-child-2">
-                    <input type="text" className="form-control" value={mobile} onChange={(e) => setMobile(e.target.value)} />
-                    <label>Mobile</label>
-                  </div>
-                  <div className="form-floating mb-3 span-child-1">
-                    <input type="text" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    <label>Email</label>
-                  </div>
-                </section>
-
-                <section>
-                  <div className="form-floating mb-3 span-child-1">
-                    <input type="text" className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} />
-                    <label>Address</label>
-                  </div>
-                  <div className="form-floating mb-3 span-child-2">
-                    <input type="text" className="form-control" value={pincode} onChange={(e) => setPincode(e.target.value)} />
-                    <label>Pincode</label>
-                  </div>
-                </section>
+        {/* Checkout Modal */}
+        {showCheckoutModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-primary">Checkout</h2>
+                <button 
+                  onClick={() => setShowCheckoutModal(false)} 
+                  className="text-gray-400 hover:text-gray-600 text-2xl"
+                >
+                  ×
+                </button>
               </div>
 
-              <div className="checkout-payment-method">
-                <h4>Payment method</h4>
-                <div className="form-floating mb-3">
-                  <select className="form-select" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-                    <option value="">choose payment method</option>
-                    <option value="netbanking">netbanking</option>
-                    <option value="card">card payments</option>
-                    <option value="upi">upi</option>
-                    <option value="cod">cash on delivery</option>
+              <div className="p-6 space-y-6">
+                {/* Checkout Details */}
+                <div>
+                  <h3 className="text-lg font-semibold text-primary mb-4">Delivery Details</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                      <input 
+                        type="text" 
+                        className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+                        value={name} 
+                        onChange={(e) => setName(e.target.value)} 
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Mobile</label>
+                        <input 
+                          type="text" 
+                          className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+                          value={mobile} 
+                          onChange={(e) => setMobile(e.target.value)} 
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input 
+                          type="email" 
+                          className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+                          value={email} 
+                          onChange={(e) => setEmail(e.target.value)} 
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                        <input 
+                          type="text" 
+                          className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+                          value={address} 
+                          onChange={(e) => setAddress(e.target.value)} 
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Pincode</label>
+                        <input 
+                          type="text" 
+                          className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+                          value={pincode} 
+                          onChange={(e) => setPincode(e.target.value)} 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment Method */}
+                <div>
+                  <h3 className="text-lg font-semibold text-primary mb-4">Payment Method</h3>
+                  <select 
+                    className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all cursor-pointer" 
+                    value={paymentMethod} 
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  >
+                    <option value="">Choose payment method</option>
+                    <option value="netbanking">Net Banking</option>
+                    <option value="card">Card Payment</option>
+                    <option value="upi">UPI</option>
+                    <option value="cod">Cash on Delivery</option>
                   </select>
-                  <label>Choose Payment method</label>
                 </div>
               </div>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                cancel
-              </button>
-              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={placeOrder}>
-                Order
-              </button>
+
+              <div className="border-t border-gray-200 px-6 py-4 flex gap-3 justify-end">
+                <button 
+                  className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors" 
+                  onClick={() => setShowCheckoutModal(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="px-6 py-2 bg-accent text-white rounded-lg font-medium hover:bg-accent-hover transition-colors" 
+                  onClick={placeOrder}
+                >
+                  Confirm Order
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

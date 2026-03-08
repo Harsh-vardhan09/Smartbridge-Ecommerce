@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import '../../styles/IndividualProduct.css'
-import {HiOutlineArrowSmLeft} from 'react-icons/hi'
+import {HiOutlineArrowLeft} from 'react-icons/hi'
 import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import { GeneralContext } from '../../context/GeneralContext';
@@ -54,6 +53,8 @@ const [email, setEmail] = useState('');
 const [address, setAddress] = useState('');
 const [pincode, setPincode] = useState('');
 const [paymentMethod, setPaymentMethod] = useState('');
+const [showBuyNowModal, setShowBuyNowModal] = useState(false);
+const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
 
 
@@ -74,6 +75,7 @@ await axios.post(
   }
 )
 .then((response)=>{
+    setShowBuyNowModal(false);
     alert('Order placed!!');
     navigate('/profile');
 })
@@ -93,154 +95,234 @@ const handleAddToCart = async() =>{
         alert("Operation failed!!");
     })
 }
+const carouselImages = [productCarouselImg1, productCarouselImg2, productCarouselImg3];
 
   return (
-    <div className="IndividualProduct-page">
-        <span onClick={()=> navigate('')}> <HiOutlineArrowSmLeft /> <p>back</p></span>
-
-        <div className="IndividualProduct-body">
-
-            <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
-                <div className="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                </div>
-                <div className="carousel-inner">
-                    <div className="carousel-item active">
-                    <img src={productCarouselImg1} className="d-block w-100" alt="..."  />
-                    </div>
-                    <div className="carousel-item">
-                    <img src={productCarouselImg2} className="d-block w-100" alt="..." />
-                    </div>
-                    <div className="carousel-item">
-                    <img src={productCarouselImg3} className="d-block w-100" alt="..." />
-                    </div>
-                </div>
-                <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span className="visually-hidden">Previous</span>
-                </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span className="visually-hidden">Next</span>
-                </button>
-            </div>
-
-
-            <div className="IndividualProduct-data">
-                <h3>{productName}</h3>
-                <p>{productDescription}</p>
-                
-                <span>
-                    <label htmlFor="productSize">Choose size</label>
-                    <select name="productSize" id="productSize" value={size} onChange={(e)=>setSize(e.target.value)}>
-                        <option value=""></option>
-                        {productSizes.map((size)=>{
-                            return(
-                                <option key={size} value={size}>{size}</option>
-                            )
-                        })}
-                    </select>
-                </span>
-                <span>
-                    <label htmlFor="productQuantity">Quantity</label>
-                    <select name="productQuantity" id="productQuantity" value={productQuantity} onChange={(e)=>setProductQuantity(e.target.value)}>
-
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                        <option value={6}>6</option>
-
-                    </select>
-                </span>
-
-                <span><h5><b>Price: </b> 	&#8377; {parseInt(productPrice - (productPrice * productDiscount)/100)}  </h5> <s>{productPrice}</s> <p>({productDiscount}% off)</p></span>
-                <h6><b>Rating:</b> 3.4/5 </h6>
-                <p className="delivery-date">Free delivery in 5 days</p>
-
-                <div className="productBuyingButtons">
-                    <button data-bs-toggle="modal" data-bs-target="#staticBackdrop">Buy now</button>
-                    <button onClick={handleAddToCart}>Add to cart</button>
-                </div>
-
-            </div>
-        </div>
-
+    <div className="min-h-screen bg-secondary py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div className="modal-content">
-                <div className="modal-header">
-                <h5 className="modal-title" id="staticBackdropLabel">Checkout</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div className="modal-body">
-                
-                <div className="checkout-address">
+        {/* Back Button */}
+        <button 
+          onClick={()=> navigate('/')} 
+          className="flex items-center gap-2 text-gray-600 hover:text-accent transition-colors mb-6"
+        >
+          <HiOutlineArrowLeft className="text-xl" />
+          <span className="font-medium">Back to Shopping</span>
+        </button>
 
-                    <h4>Details</h4>
-                    
-                    <div className="form-floating mb-3">
-                        <input type="text" className="form-control" id="floatingInput1" value={name} onChange={(e)=>setName(e.target.value)} />
-                        <label htmlFor="floatingInput1">Name</label>
-                    </div>
-
-                    <section>
-
-                        <div className="form-floating mb-3">
-                            <input type='text' className="form-control" id="floatingInput3" value={mobile} onChange={(e)=>setMobile(e.target.value)} />
-                            <label htmlFor="floatingInput3">Mobile</label>
-                        </div>
-                        <div className="form-floating mb-3 span-child-1">
-                            <input type='text' className="form-control" id="floatingInput2" value={email} onChange={(e)=>setEmail(e.target.value)} />
-                            <label htmlFor="floatingInput2">Email</label>
-                        </div>
-
-                    </section>
-
-
-                    <section>
-                        <div className="form-floating mb-3 span-child-1">
-                            <input type='text' className="form-control" id="floatingInput6" value={address} onChange={(e)=>setAddress(e.target.value)} />
-                            <label htmlFor="floatingInput6">Address</label>
-                        </div>
-
-                        <div className="form-floating mb-3 span-child-2">
-                            <input type='text' className="form-control" id="floatingInput7" value={pincode} onChange={(e)=>setPincode(e.target.value)} />
-                            <label htmlFor="floatingInput7">Pincode</label>
-                        </div>
-                    </section>
-
-
-                </div>
-
-                <div className="checkout-payment-method">
-                    <h4>Payment method</h4>
-                    <div className="form-floating mb-3">
-                        <select className="form-select form-select-md mb-3" id="floatingInput8" value={paymentMethod} onChange={(e)=>setPaymentMethod(e.target.value)}>
-                        <option value=""></option>
-                        <option value="netbanking">netbanking</option>
-                        <option value="card">card payments</option>
-                        <option value="upi">upi</option>
-                        <option value="cod">cash on delivery</option>
-                        </select>
-                        <label htmlFor="floatingInput8">Choose Payment method</label>
-                    </div>
-                </div>
-
-                </div>
-                <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={buyNow}>Buy now</button>
-                </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          {/* Image Gallery */}
+          <div className="space-y-4">
+            {/* Main Image */}
+            <div className="bg-white rounded-2xl overflow-hidden shadow-sm aspect-square">
+              <img 
+                src={carouselImages[currentImageIndex] || productMainImg} 
+                alt={productName} 
+                className="w-full h-full object-cover"
+              />
             </div>
+            
+            {/* Thumbnail Images */}
+            <div className="grid grid-cols-3 gap-3">
+              {carouselImages.filter(img => img).map((img, index) => (
+                <div 
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`bg-white rounded-lg overflow-hidden cursor-pointer transition-all ${
+                    currentImageIndex === index ? 'ring-2 ring-accent' : 'hover:ring-2 hover:ring-gray-300'
+                  }`}
+                >
+                  <img 
+                    src={img} 
+                    alt={`${productName} ${index + 1}`} 
+                    className="w-full aspect-square object-cover"
+                  />
+                </div>
+              ))}
             </div>
+          </div>
+
+          {/* Product Details */}
+          <div className="bg-white rounded-2xl p-8 shadow-sm">
+            <h1 className="text-3xl font-bold text-primary mb-4">{productName}</h1>
+            <p className="text-gray-600 mb-6">{productDescription}</p>
+            
+            {/* Price */}
+            <div className="flex items-center gap-3 mb-6">
+              <span className="text-3xl font-bold text-primary">
+                ₹{parseInt(productPrice - (productPrice * productDiscount)/100)}
+              </span>
+              <span className="text-xl text-gray-400 line-through">₹{productPrice}</span>
+              <span className="text-sm font-semibold text-accent bg-red-50 px-3 py-1 rounded">
+                {productDiscount}% off
+              </span>
+            </div>
+
+            {/* Rating */}
+            <div className="flex items-center gap-2 mb-6 text-sm text-gray-600">
+              <span className="font-semibold">Rating:</span>
+              <span>⭐ 3.4/5</span>
+            </div>
+
+            {/* Size Selection */}
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-primary mb-3">Choose Size</label>
+              <select 
+                value={size} 
+                onChange={(e)=>setSize(e.target.value)}
+                className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all cursor-pointer"
+              >
+                <option value="">Select size</option>
+                {productSizes.map((s)=>(
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Quantity Selection */}
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-primary mb-3">Quantity</label>
+              <select 
+                value={productQuantity} 
+                onChange={(e)=>setProductQuantity(e.target.value)}
+                className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all cursor-pointer"
+              >
+                {[1, 2, 3, 4, 5, 6].map(num => (
+                  <option key={num} value={num}>{num}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Delivery Info */}
+            <p className="text-green-600 font-medium mb-6">✓ Free delivery in 5 days</p>
+
+            {/* Action Buttons */}
+            <div className="grid grid-cols-2 gap-4">
+              <button 
+                onClick={() => setShowBuyNowModal(true)}
+                className="py-3 bg-accent text-white rounded-lg font-semibold hover:bg-accent-hover transition-all shadow-md hover:shadow-lg"
+              >
+                Buy Now
+              </button>
+              <button 
+                onClick={handleAddToCart}
+                className="py-3 text-accent border-2 border-accent rounded-lg font-semibold hover:bg-accent hover:text-white transition-all"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
         </div>
 
+        {/* Buy Now Modal */}
+        {showBuyNowModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-primary">Checkout</h2>
+                <button 
+                  onClick={() => setShowBuyNowModal(false)} 
+                  className="text-gray-400 hover:text-gray-600 text-2xl"
+                >
+                  ×
+                </button>
+              </div>
 
+              <div className="p-6 space-y-6">
+                {/* Delivery Details */}
+                <div>
+                  <h3 className="text-lg font-semibold text-primary mb-4">Delivery Details</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                      <input 
+                        type="text" 
+                        className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+                        value={name} 
+                        onChange={(e)=>setName(e.target.value)} 
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Mobile</label>
+                        <input 
+                          type="text" 
+                          className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+                          value={mobile} 
+                          onChange={(e)=>setMobile(e.target.value)} 
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input 
+                          type="email" 
+                          className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+                          value={email} 
+                          onChange={(e)=>setEmail(e.target.value)} 
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                        <input 
+                          type="text" 
+                          className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+                          value={address} 
+                          onChange={(e)=>setAddress(e.target.value)} 
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Pincode</label>
+                        <input 
+                          type="text" 
+                          className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all" 
+                          value={pincode} 
+                          onChange={(e)=>setPincode(e.target.value)} 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment Method */}
+                <div>
+                  <h3 className="text-lg font-semibold text-primary mb-4">Payment Method</h3>
+                  <select 
+                    className="w-full px-4 py-3 bg-secondary border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all cursor-pointer" 
+                    value={paymentMethod} 
+                    onChange={(e)=>setPaymentMethod(e.target.value)}
+                  >
+                    <option value="">Choose payment method</option>
+                    <option value="netbanking">Net Banking</option>
+                    <option value="card">Card Payment</option>
+                    <option value="upi">UPI</option>
+                    <option value="cod">Cash on Delivery</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-200 px-6 py-4 flex gap-3 justify-end">
+                <button 
+                  className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors" 
+                  onClick={() => setShowBuyNowModal(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="px-6 py-2 bg-accent text-white rounded-lg font-medium hover:bg-accent-hover transition-colors" 
+                  onClick={buyNow}
+                >
+                  Confirm Order
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
     </div>
   )

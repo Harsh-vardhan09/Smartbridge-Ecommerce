@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import '../styles/Products.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -93,124 +92,166 @@ const navigate = useNavigate();
 
 
   return (
-    <div className="products-container">
-        <div className="products-filter">
-            <h4>Filters</h4>
-            <div className="product-filters-body">
-
-                <div className="filter-sort">
-                    <h6>Sort By</h6>
-                    <div className="filter-sort-body sub-filter-body">
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="filter-sort-radio1" value="popularity" checked={sortFilter === 'popularity'} onChange={handleSortFilterChange} />
-                            <label class="form-check-label" for="filter-sort-radio1" >
-                                Popular
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="filter-sort-radio2" value="low-price" checked={sortFilter === 'low-price'} onChange={handleSortFilterChange} />
-                            <label class="form-check-label" for="filter-sort-radio2">
-                                Price (low to high)
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="filter-sort-radio3" value="high-price" checked={sortFilter === 'high-price'} onChange={handleSortFilterChange} />
-                            <label class="form-check-label" for="filter-sort-radio3">
-                                Price (high to low)
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="filter-sort-radio4" value="discount" checked={sortFilter === 'discount'} onChange={handleSortFilterChange} />
-                            <label class="form-check-label" for="filter-sort-radio4">
-                                Discount
-                            </label>
-                        </div>
-
-                    </div>
-                </div>
-
-                {props.category === 'all' ?
-                     <div className="filter-categories">
-                        <h6>Categories</h6>
-                        <div className="filter-categories-body sub-filter-body">
-    
-                            {categories.map((category)=>{
-                                return(
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value={category} id={'productCategory'+ category} checked={categoryFilter.includes(category)} onChange={handleCategoryCheckBox} />
-                                        <label class="form-check-label" for={'productCategory'+ category}>
-                                            {category}
-                                        </label>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div>
-
-                 :
-
-                 ""
-                }
-
-                
-                <div className="filter-gender">
-                    <h6>Gender</h6>
-                    <div className="filter-gender-body sub-filter-body">
-                        
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Men" id="filter-gender-check-1" checked={genderFilter.includes('Men')} onChange={handleGenderCheckBox} />
-                            <label class="form-check-label" for="filter-gender-check-1">
-                                Men
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Women" id="filter-gender-check-2" checked={genderFilter.includes('Women')} onChange={handleGenderCheckBox} />
-                            <label class="form-check-label" for="filter-gender-check-2">
-                                Women
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Unisex" id="filter-gender-check-3" checked={genderFilter.includes('Unisex')} onChange={handleGenderCheckBox} />
-                            <label class="form-check-label" for="filter-gender-check-3">
-                                Unisex
-                            </label>
-                        </div>
-
-                    </div>
-                </div>
-
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="flex flex-col lg:flex-row gap-8">
+        
+        {/* Filters Sidebar */}
+        <aside className="lg:w-64 flex-shrink-0">
+          <div className="bg-white rounded-xl p-6 shadow-sm sticky top-20">
+            <h2 className="text-xl font-bold text-primary mb-6">Filters</h2>
+            
+            {/* Sort By */}
+            <div className="mb-6 pb-6 border-b border-gray-200">
+              <h3 className="font-semibold text-primary mb-3 text-sm uppercase tracking-wide">Sort By</h3>
+              <div className="space-y-2">
+                <label className="flex items-center cursor-pointer group">
+                  <input 
+                    type="radio" 
+                    name="sort" 
+                    value="popularity" 
+                    checked={sortFilter === 'popularity'} 
+                    onChange={handleSortFilterChange}
+                    className="w-4 h-4 text-accent focus:ring-accent focus:ring-2"
+                  />
+                  <span className="ml-2 text-sm text-gray-700 group-hover:text-accent transition-colors">Popular</span>
+                </label>
+                <label className="flex items-center cursor-pointer group">
+                  <input 
+                    type="radio" 
+                    name="sort" 
+                    value="low-price" 
+                    checked={sortFilter === 'low-price'} 
+                    onChange={handleSortFilterChange}
+                    className="w-4 h-4 text-accent focus:ring-accent focus:ring-2"
+                  />
+                  <span className="ml-2 text-sm text-gray-700 group-hover:text-accent transition-colors">Price (Low to High)</span>
+                </label>
+                <label className="flex items-center cursor-pointer group">
+                  <input 
+                    type="radio" 
+                    name="sort" 
+                    value="high-price" 
+                    checked={sortFilter === 'high-price'} 
+                    onChange={handleSortFilterChange}
+                    className="w-4 h-4 text-accent focus:ring-accent focus:ring-2"
+                  />
+                  <span className="ml-2 text-sm text-gray-700 group-hover:text-accent transition-colors">Price (High to Low)</span>
+                </label>
+                <label className="flex items-center cursor-pointer group">
+                  <input 
+                    type="radio" 
+                    name="sort" 
+                    value="discount" 
+                    checked={sortFilter === 'discount'} 
+                    onChange={handleSortFilterChange}
+                    className="w-4 h-4 text-accent focus:ring-accent focus:ring-2"
+                  />
+                  <span className="ml-2 text-sm text-gray-700 group-hover:text-accent transition-colors">Discount</span>
+                </label>
+              </div>
             </div>
-        </div>
 
+            {/* Categories */}
+            {props.category === 'all' && (
+              <div className="mb-6 pb-6 border-b border-gray-200">
+                <h3 className="font-semibold text-primary mb-3 text-sm uppercase tracking-wide">Categories</h3>
+                <div className="space-y-2">
+                  {categories.map((category)=>(
+                    <label key={category} className="flex items-center cursor-pointer group">
+                      <input 
+                        type="checkbox" 
+                        value={category} 
+                        checked={categoryFilter.includes(category)} 
+                        onChange={handleCategoryCheckBox}
+                        className="w-4 h-4 text-accent rounded focus:ring-accent focus:ring-2"
+                      />
+                      <span className="ml-2 text-sm text-gray-700 group-hover:text-accent transition-colors">{category}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
 
-        <div className="products-body">
-            <h3>All Products</h3>
-            <div className="products">
-
-                {visibleProducts.map((product)=>{
-                    return(
-                        <div className='product-item' >
-                            <div className="product" onClick={()=> navigate(`/product/${product._id}`)}>
-                                <img src={product.mainImg} alt="" />
-                                <div className="product-data">
-                                    <h6>{product.title}</h6>
-                                    <p>{product.description.slice(0,30) + '....'}</p>
-                                    <h5>&#8377; {parseInt(product.price - (product.price * product.discount)/100)} <s>{product.price}</s><p>( {product.discount}% off)</p></h5>
-                                </div>
-                            </div>
-                        </div>
-                    )
-                })}
-
- 
+            {/* Gender */}
+            <div>
+              <h3 className="font-semibold text-primary mb-3 text-sm uppercase tracking-wide">Gender</h3>
+              <div className="space-y-2">
+                <label className="flex items-center cursor-pointer group">
+                  <input 
+                    type="checkbox" 
+                    value="Men" 
+                    checked={genderFilter.includes('Men')} 
+                    onChange={handleGenderCheckBox}
+                    className="w-4 h-4 text-accent rounded focus:ring-accent focus:ring-2"
+                  />
+                  <span className="ml-2 text-sm text-gray-700 group-hover:text-accent transition-colors">Men</span>
+                </label>
+                <label className="flex items-center cursor-pointer group">
+                  <input 
+                    type="checkbox" 
+                    value="Women" 
+                    checked={genderFilter.includes('Women')} 
+                    onChange={handleGenderCheckBox}
+                    className="w-4 h-4 text-accent rounded focus:ring-accent focus:ring-2"
+                  />
+                  <span className="ml-2 text-sm text-gray-700 group-hover:text-accent transition-colors">Women</span>
+                </label>
+                <label className="flex items-center cursor-pointer group">
+                  <input 
+                    type="checkbox" 
+                    value="Unisex" 
+                    checked={genderFilter.includes('Unisex')} 
+                    onChange={handleGenderCheckBox}
+                    className="w-4 h-4 text-accent rounded focus:ring-accent focus:ring-2"
+                  />
+                  <span className="ml-2 text-sm text-gray-700 group-hover:text-accent transition-colors">Unisex</span>
+                </label>
+              </div>
             </div>
-        </div>
+          </div>
+        </aside>
+
+        {/* Products Grid */}
+        <main className="flex-1">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-primary">All Products</h2>
+            <p className="text-gray-600 text-sm mt-1">{visibleProducts.length} items found</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {visibleProducts.map((product)=>(
+              <div 
+                key={product._id}
+                className='bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group'
+                onClick={()=> navigate(`/product/${product._id}`)}
+              >
+                <div className="aspect-square overflow-hidden bg-gray-50">
+                  <img 
+                    src={product.mainImg} 
+                    alt={product.title} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-semibold text-primary mb-1 line-clamp-1 group-hover:text-accent transition-colors">{product.title}</h3>
+                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.description}</p>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-lg font-bold text-primary">₹{parseInt(product.price - (product.price * product.discount)/100)}</span>
+                    <span className="text-sm text-gray-400 line-through">₹{product.price}</span>
+                    <span className="text-xs font-semibold text-accent bg-red-50 px-2 py-1 rounded">{product.discount}% off</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {visibleProducts.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-gray-500 text-lg">No products found. Try adjusting your filters.</p>
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   )
 }

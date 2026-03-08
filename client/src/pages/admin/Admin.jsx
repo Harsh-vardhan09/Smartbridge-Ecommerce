@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import '../../styles/Admin.css'
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 
@@ -59,52 +58,78 @@ const Admin = () => {
 
 
   return (
-    <div className="admin-page">
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-3xl font-bold text-primary mb-8">Admin Dashboard</h2>
 
-      <div>
-        <div className="admin-home-card">
-          <h5>Total users</h5>
-          <p>{userCount}</p>
-          <button onClick={()=> navigate('/all-users')}>View all</button>
-        </div>
-      </div>
-      
-      <div>
-        <div className="admin-home-card">
-          <h5>All Products</h5>
-          <p>{productCount}</p>
-          <button onClick={()=> navigate('/all-products')}>View all</button>
-        </div>
-      </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
-      <div>
-        <div className="admin-home-card">
-          <h5>All Orders</h5>
-          <p>{ordersCount}</p>
-          <button onClick={()=> navigate('/all-orders')}>View all</button>
-        </div>
-      </div>
-
-      <div>
-        <div className="admin-home-card">
-          <h5>Add Product</h5>
-          <p>(new)</p>
-          <button onClick={()=> navigate('/new-product')}>Add now</button>
-        </div>
-      </div>
-
-      <div>
-        <div className="admin-banner-input admin-home-card">
-          <h5>Update banner</h5>
-          <div className="form-floating">
-            <input type="text" className="form-control" id="floatingURLInput" value={banner} onChange={(e)=>setBanner(e.target.value)} />
-            <label htmlFor="floatingURLInput" >Banner url</label>
+          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <h5 className="text-gray-600 text-sm font-medium mb-2">Total Users</h5>
+            <p className="text-4xl font-bold text-primary mb-4">{userCount}</p>
+            <button 
+              onClick={()=> navigate('/all-users')}
+              className="w-full bg-accent text-white py-2 px-4 rounded-lg hover:bg-accent-hover transition-colors font-medium"
+            >
+              View all
+            </button>
           </div>
-          <button onClick={updateBanner}>Update</button>
-        </div>
-      </div>
-      
 
+          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <h5 className="text-gray-600 text-sm font-medium mb-2">All Products</h5>
+            <p className="text-4xl font-bold text-primary mb-4">{productCount}</p>
+            <button 
+              onClick={()=> navigate('/all-products')}
+              className="w-full bg-accent text-white py-2 px-4 rounded-lg hover:bg-accent-hover transition-colors font-medium"
+            >
+              View all
+            </button>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <h5 className="text-gray-600 text-sm font-medium mb-2">All Orders</h5>
+            <p className="text-4xl font-bold text-primary mb-4">{ordersCount}</p>
+            <button 
+              onClick={()=> navigate('/all-orders')}
+              className="w-full bg-accent text-white py-2 px-4 rounded-lg hover:bg-accent-hover transition-colors font-medium"
+            >
+              View all
+            </button>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <h5 className="text-gray-600 text-sm font-medium mb-2">Add Product</h5>
+            <p className="text-4xl font-bold text-accent mb-4">(new)</p>
+            <button 
+              onClick={()=> navigate('/new-product')}
+              className="w-full bg-accent text-white py-2 px-4 rounded-lg hover:bg-accent-hover transition-colors font-medium"
+            >
+              Add now
+            </button>
+          </div>
+
+        </div>
+
+        <div className="bg-white rounded-xl shadow-md p-6 max-w-2xl">
+          <h5 className="text-xl font-bold text-primary mb-4">Update Banner</h5>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input 
+              type="text" 
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" 
+              placeholder="Banner URL"
+              value={banner} 
+              onChange={(e)=>setBanner(e.target.value)} 
+            />
+            <button 
+              onClick={updateBanner}
+              className="bg-accent text-white py-2 px-6 rounded-lg hover:bg-accent-hover transition-colors font-medium"
+            >
+              Update
+            </button>
+          </div>
+        </div>
+
+      </div>
     </div>
   )
 }

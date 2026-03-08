@@ -41,7 +41,7 @@ function App() {
       <Navbar />
 
       <Routes>
-        <Route path='/auth' element={<Authentication />} />
+        <Route path='/authentication' element={<Authentication />} />
         <Route exact path='' element={<Home />} />
         <Route path='/cart' element={<Cart cartItems={cartItems} setCartItems={setCartItems} fetchCart={fetchCart} />} />
         <Route path='/product/:id' element={<IndividualProduct />} />
